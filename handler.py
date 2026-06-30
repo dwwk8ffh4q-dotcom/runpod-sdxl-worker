@@ -94,4 +94,8 @@ def generate(job):
     return {"image": f"data:image/png;base64,{img_b64}"}
 
 
+# Preload at worker startup so model loading counts as worker init (delay time),
+# leaving each request as pure inference (~3s). Runs once per worker.
+load_pipeline()
+
 runpod.serverless.start({"handler": generate})
